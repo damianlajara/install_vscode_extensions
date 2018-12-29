@@ -30,9 +30,11 @@ def install_plugins(plugins = [])
   end
   failed = []
   plugins.each do |plugin|
-    puts "Installing #{plugin}..."
-    if(system 'code --install-extension #{plugin}')
-      print_success_msg "Successfully installed #{plugin}"
+    puts "Checking #{plugin}..."
+    output = %x(code --install-extension #{plugin})
+    puts output
+    if($?.success?)
+      print_success_msg "Successfully installed #{plugin}" unless /is already installed/ =~ output
     else
       print_error_msg "Failed installing #{plugin}"
       failed.push(plugin)
